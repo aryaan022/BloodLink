@@ -1,0 +1,414 @@
+<!-- Donor Dashboard -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - BloodLink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/dashboard-ultra.css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-droplet"></i>
+                <span>BloodLink</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="overview">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="#" class="nav-item" data-page="emergencies">
+                    <i class="fas fa-ambulance"></i> Emergencies
+                    <span class="emergency-badge" id="emergencyCount" style="display:none;">0</span>
+                </a>
+                <a href="#" class="nav-item" data-page="available-requests">
+                    <i class="fas fa-heart"></i> Available Requests
+                </a>
+                <a href="#" class="nav-item" data-page="my-donations">
+                    <i class="fas fa-history"></i> My Donations
+                </a>
+                <a href="#" class="nav-item" data-page="achievements">
+                    <i class="fas fa-trophy"></i> Achievements
+                </a>
+                <a href="#" class="nav-item" data-page="certificates">
+                    <i class="fas fa-certificate"></i> Certificates
+                </a>
+                <a href="#" class="nav-item" data-page="profile">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="#" class="nav-item" data-page="education">
+                    <i class="fas fa-book"></i> Education
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <button class="mobile-menu-btn" id="mobileSidebarBtn" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Welcome, Donor!</h1>
+                <div class="header-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationCount">0</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">D</div>
+                        <span id="userName">Loading...</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Overview Page -->
+            <section id="overview" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Donations</h3>
+                        <p class="stat-value" id="totalDonations">0</p>
+                        <small>Units contributed</small>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Lives Impacted</h3>
+                        <p class="stat-value" id="livesImpacted">0</p>
+                        <small>People helped</small>
+                    </div>
+                    <div class="stat-card points-card">
+                        <h3>Total Points</h3>
+                        <p class="stat-value" id="totalPoints">0</p>
+                        <small>Level: <span id="donorLevel">1</span> - <span id="levelTitle">Newcomer</span></small>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Eligibility Status</h3>
+                        <p class="stat-value" id="eligibilityStatus">Eligible</p>
+                        <small>Ready to donate</small>
+                    </div>
+                </div>
+
+                <!-- Emergency Alert Banner -->
+                <div class="emergency-alert-banner" id="emergencyAlertBanner" style="display:none;">
+                    <div class="emergency-icon">🚨</div>
+                    <div class="emergency-info">
+                        <h3>Active Emergency Requests!</h3>
+                        <p id="emergencyAlertText">There are urgent blood requests matching your blood type.</p>
+                    </div>
+                    <button class="btn btn-emergency" onclick="navigateToPage('emergencies')">View Emergencies</button>
+                </div>
+
+                <!-- 3D Progress Ring -->
+                <div class="dashboard-card full-width">
+                    <h2>Donation Progress</h2>
+                    <div class="progress-3d-container">
+                        <canvas id="progressRingCanvas"></canvas>
+                        <div class="progress-info">
+                            <p id="nextDonationDate">Next eligible: <strong>Dec 25, 2025</strong></p>
+                            <p id="daysSinceLastDonation">Days since last donation: <strong id="dayCount">45</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-card">
+                    <h2>Recent Requests</h2>
+                    <div class="requests-list" id="recentRequests">
+                        <p class="loading">Loading requests...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Available Requests Page -->
+            <section id="available-requests" class="page">
+                <div class="filters">
+                    <input type="text" id="searchRequests" placeholder="Search by hospital name..." class="search-box">
+                    <select id="bloodGroupFilter" class="filter-select">
+                        <option value="">All Blood Groups</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                    <select id="urgencyFilter" class="filter-select">
+                        <option value="">All Urgency Levels</option>
+                        <option value="Critical">Critical</option>
+                        <option value="Urgent">Urgent</option>
+                        <option value="Normal">Normal</option>
+                    </select>
+                </div>
+
+                <div class="requests-grid" id="availableRequestsList">
+                    <p class="loading">Loading available requests...</p>
+                </div>
+            </section>
+
+            <!-- Emergency Requests Page -->
+            <section id="emergencies" class="page">
+                <div class="emergency-header">
+                    <h2><i class="fas fa-ambulance"></i> Emergency Blood Requests</h2>
+                    <p>Critical requests that need immediate response. Your quick action can save lives!</p>
+                </div>
+
+                <!-- Emergency Map -->
+                <div class="dashboard-card full-width" style="height: 500px; padding: 0; overflow: hidden;">
+                    <div id="emergencyMap" style="width: 100%; height: 100%;"></div>
+                </div>
+                
+                <div class="emergency-list" id="emergencyRequestsList">
+                    <p class="loading">Loading emergency requests...</p>
+                </div>
+            </section>
+
+            <!-- Achievements Page -->
+            <section id="achievements" class="page">
+                <div class="achievements-header">
+                    <div class="level-display">
+                        <div class="level-circle" id="levelCircle">
+                            <span class="level-number" id="achievementLevel">1</span>
+                        </div>
+                        <div class="level-info">
+                            <h2 id="achievementLevelTitle">Newcomer</h2>
+                            <div class="level-progress-bar">
+                                <div class="level-progress-fill" id="levelProgressFill" style="width: 0%"></div>
+                            </div>
+                            <p><span id="currentPoints">0</span> / <span id="nextLevelPoints">100</span> points to next level</p>
+                        </div>
+                    </div>
+                    <div class="stats-summary">
+                        <div class="mini-stat">
+                            <i class="fas fa-medal"></i>
+                            <span id="badgeCount">0</span>
+                            <small>Badges</small>
+                        </div>
+                        <div class="mini-stat">
+                            <i class="fas fa-fire"></i>
+                            <span id="donationStreak">0</span>
+                            <small>Streak</small>
+                        </div>
+                        <div class="mini-stat">
+                            <i class="fas fa-bolt"></i>
+                            <span id="emergencyResponseCount">0</span>
+                            <small>Emergencies</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="badges-section">
+                    <h3><i class="fas fa-trophy"></i> Your Badges</h3>
+                    <div class="badges-grid" id="badgesGrid">
+                        <p class="loading">Loading badges...</p>
+                    </div>
+                </div>
+
+                <div class="leaderboard-section">
+                    <h3><i class="fas fa-crown"></i> Leaderboard</h3>
+                    <div class="leaderboard-list" id="leaderboardList">
+                        <p class="loading">Loading leaderboard...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Certificates Page -->
+            <section id="certificates" class="page">
+                <div class="certificates-header">
+                    <h2><i class="fas fa-certificate"></i> My Donation Certificates</h2>
+                    <p>Download your official certificates for each completed donation</p>
+                </div>
+                
+                <div class="certificates-grid" id="certificatesGrid">
+                    <p class="loading">Loading certificates...</p>
+                </div>
+            </section>
+
+            <!-- My Donations Page -->
+            <section id="my-donations" class="page">
+                <div class="donation-history" id="donationHistory">
+                    <p class="loading">Loading donation history...</p>
+                </div>
+            </section>
+
+            <!-- Profile Page -->
+            <section id="profile" class="page">
+                <div class="dashboard-card">
+                    <h2>My Profile</h2>
+                    <form id="profileForm" class="form">
+                        <div class="form-group">
+                            <label>Blood Group</label>
+                            <input type="text" id="profileBloodGroup" readonly class="readonly-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="profilePhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea id="profileAddress" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="allowContact"> Allow hospitals to contact me
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="dashboard-card">
+                    <h2>Notification Preferences</h2>
+                    <form id="notificationsForm" class="form">
+                        <label class="checkbox">
+                            <input type="checkbox" id="notifEmail" checked>
+                            <span>Email Notifications</span>
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" id="notifSMS" checked>
+                            <span>SMS Notifications</span>
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" id="notifUrgent" checked>
+                            <span>Urgent Request Alerts</span>
+                        </label>
+                        <button type="submit" class="btn btn-primary">Update Preferences</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Education Page -->
+            <section id="education" class="page">
+                <div class="dashboard-card full-width">
+                    <h2>Blood Donation Education</h2>
+                    <p>Learn about blood donation and the impact you make</p>
+                </div>
+
+                <!-- 3D Human Body Model -->
+                <div class="dashboard-card full-width">
+                    <h2><i class="fas fa-heartbeat" style="color: #e74c3c; margin-right: 10px;"></i>Interactive Circulatory System</h2>
+                    <p style="color: rgba(255,255,255,0.6); margin-bottom: 1rem;">Explore the human circulatory system - see how blood flows through arteries and veins</p>
+                    <div class="education-3d-container">
+                        <canvas id="bodyModelCanvas"></canvas>
+                        <div class="interaction-hint">
+                            <i class="fas fa-hand-pointer"></i>
+                            <span>Move mouse to interact • Auto-rotates when idle</span>
+                        </div>
+                    </div>
+                    <div class="circulatory-legend" style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="width: 12px; height: 12px; background: #ff4444; border-radius: 50%; box-shadow: 0 0 10px #ff4444;"></span>
+                            <span style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Arteries (Oxygenated)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="width: 12px; height: 12px; background: #5566bb; border-radius: 50%; box-shadow: 0 0 10px #5566bb;"></span>
+                            <span style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Veins (Deoxygenated)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="width: 12px; height: 12px; background: #cc2222; border-radius: 50%; box-shadow: 0 0 15px #cc2222; animation: pulse 1s infinite;"></span>
+                            <span style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Heart</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="education-grid">
+                    <div class="education-card">
+                        <i class="fas fa-heart"></i>
+                        <h3>Benefits of Donation</h3>
+                        <ul>
+                            <li>Save up to 3 lives with one donation</li>
+                            <li>Reduces risk of heart disease</li>
+                            <li>Improves blood flow</li>
+                            <li>Boosts overall health</li>
+                        </ul>
+                    </div>
+                    <div class="education-card">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>Before Donation</h3>
+                        <ul>
+                            <li>Get good sleep</li>
+                            <li>Eat iron-rich foods</li>
+                            <li>Stay hydrated</li>
+                            <li>Avoid caffeine</li>
+                        </ul>
+                    </div>
+                    <div class="education-card">
+                        <i class="fas fa-apple-alt"></i>
+                        <h3>After Donation</h3>
+                        <ul>
+                            <li>Rest for 15 minutes</li>
+                            <li>Drink fluids</li>
+                            <li>Eat iron-rich snacks</li>
+                            <li>Avoid heavy exercise</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Expressing Interest -->
+    <div id="interestModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Express Interest</h2>
+            <p id="modalRequestInfo"></p>
+            <button id="confirmInterestBtn" class="btn btn-primary">Confirm Interest</button>
+        </div>
+    </div>
+
+    <!-- Modal for Emergency Response -->
+    <div id="emergencyModal" class="modal">
+        <div class="modal-content emergency-modal">
+            <span class="close" onclick="closeEmergencyModal()">&times;</span>
+            <div class="emergency-modal-header">
+                <i class="fas fa-ambulance"></i>
+                <h2>Respond to Emergency</h2>
+            </div>
+            <div id="emergencyModalInfo"></div>
+            <div class="form-group">
+                <label for="estimatedArrival">Estimated Arrival Time (minutes)</label>
+                <select id="estimatedArrival" class="form-control">
+                    <option value="15">Within 15 minutes</option>
+                    <option value="30" selected>Within 30 minutes</option>
+                    <option value="45">Within 45 minutes</option>
+                    <option value="60">Within 1 hour</option>
+                </select>
+            </div>
+            <button id="confirmEmergencyBtn" class="btn btn-emergency">
+                <i class="fas fa-check"></i> I'm On My Way!
+            </button>
+        </div>
+    </div>
+
+    <!-- Certificate Preview Modal -->
+    <div id="certificateModal" class="modal">
+        <div class="modal-content certificate-modal">
+            <span class="close" onclick="closeCertificateModal()">&times;</span>
+            <iframe id="certificateFrame" style="width:100%;height:600px;border:none;"></iframe>
+        </div>
+    </div>
+
+    <script src="/js/auth-check.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/mapbox-emergency.js"></script>
+    <script src="/js/donor-dashboard.js"></script>
+    <script src="/js/3d-progress-ring.js"></script>
+    <script src="/js/3d-body-model.js"></script>
+</body>
+</html>

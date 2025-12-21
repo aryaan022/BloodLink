@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BloodLink</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/three@r128/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@r128/examples/js/controls/OrbitControls.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="/js/auth-check.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-hospital"></i>
+                    <span>BloodLink Admin</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-page="hospitals">
+                    <i class="fas fa-hospital"></i> Hospitals
+                </a>
+                <a href="#" class="nav-item" data-page="users">
+                    <i class="fas fa-users"></i> Users
+                </a>
+                <a href="#" class="nav-item" data-page="statistics">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </a>
+                <a href="#" class="nav-item" data-page="logs">
+                    <i class="fas fa-file-alt"></i> System Logs
+                </a>
+                <a href="#" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <div class="admin-topbar">
+                <div class="topbar-left">
+                    <button id="sidebarToggle" class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-profile">
+                        <img src="https://via.placeholder.com/40" alt="Admin" class="profile-img">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="admin-content">
+                <!-- Dashboard Page -->
+                <div id="dashboard" class="admin-page active">
+                    <div class="page-header">
+                        <h2>Platform Dashboard</h2>
+                        <p class="last-updated">Last updated: <span id="lastUpdateTime">Just now</span></p>
+                    </div>
+
+                    <!-- Health Overview Cards -->
+                    <div class="health-cards">
+                        <div class="health-card card-health">
+                            <div class="card-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>System Health</h3>
+                                <div class="health-value" id="systemHealth">98.5%</div>
+                                <div class="health-bar">
+                                    <div class="health-fill" id="healthFill"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="health-card card-emergency">
+                            <div class="card-icon">
+                                <i class="fas fa-ambulance"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Active Emergencies</h3>
+                                <div class="stat-number" id="activeEmergencies">0</div>
+                                <p class="stat-label">Requiring attention</p>
+                            </div>
+                        </div>
+
+                        <div class="health-card card-response">
+                            <div class="card-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Response Rate</h3>
+                                <div class="stat-number" id="responseRate">0%</div>
+                                <p class="stat-label">Emergency success</p>
+                            </div>
+                        </div>
+
+                        <div class="health-card card-users">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Donors Online</h3>
+                                <div class="stat-number" id="donorsOnline">0</div>
+                                <p class="stat-label">Currently available</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-header">Total Users</div>
+                            <div class="metric-large" id="totalUsers">0</div>
+                            <div class="metric-breakdown">
+                                <span><i class="fas fa-user"></i> <span id="totalDonors">0</span> Donors</span>
+                                <span><i class="fas fa-hospital"></i> <span id="totalHospitals">0</span> Hospitals</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-box">
+                            <div class="metric-header">Today's Activity</div>
+                            <div class="metric-large" id="donationsToday">0</div>
+                            <div class="metric-breakdown">
+                                <span><i class="fas fa-drop"></i> Donations</span>
+                                <span id="emergenciesToday">0</span> Emergencies
+                            </div>
+                        </div>
+
+                        <div class="metric-box">
+                            <div class="metric-header">Avg Response Time</div>
+                            <div class="metric-large" id="avgResponseTime">5</div>
+                            <div class="metric-breakdown">
+                                <span>minutes from alert to response</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3D Statistics Visualization -->
+                    <div class="stats-section">
+                        <h3>Blood Type Distribution</h3>
+                        <div id="threeDContainer" class="three-d-container"></div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="charts-row">
+                        <div class="chart-container">
+                            <h3>Emergency Levels</h3>
+                            <canvas id="emergencyLevelChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Blood Type Demand</h3>
+                            <canvas id="bloodTypeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Emergencies -->
+                    <div class="recent-section">
+                        <h3>Recent Active Emergencies</h3>
+                        <div id="recentEmergencies" class="emergencies-list"></div>
+                    </div>
+                </div>
+
+                <!-- Hospitals Page -->
+                <div id="hospitals" class="admin-page">
+                    <div class="page-header">
+                        <h2>Hospital Management</h2>
+                        <p>Verify and manage hospital registrations</p>
+                    </div>
+
+                    <div class="filters-bar">
+                        <input type="text" id="hospitalSearch" placeholder="Search hospitals..." class="search-input">
+                        <select id="verificationFilter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="verified">Verified</option>
+                            <option value="pending">Pending</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <div id="hospitalsList" class="hospitals-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Hospital Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Registered</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hospitalsBody">
+                                <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Users Page -->
+                <div id="users" class="admin-page">
+                    <div class="page-header">
+                        <h2>User Management</h2>
+                        <p>Manage all users on the platform</p>
+                    </div>
+
+                    <div class="filters-bar">
+                        <input type="text" id="userSearch" placeholder="Search users..." class="search-input">
+                        <select id="userTypeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="donor">Donors</option>
+                            <option value="hospital">Hospitals</option>
+                        </select>
+                        <select id="userStatusFilter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="suspended">Suspended</option>
+                            <option value="banned">Banned</option>
+                        </select>
+                    </div>
+
+                    <div id="usersList" class="users-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersBody">
+                                <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Statistics Page -->
+                <div id="statistics" class="admin-page">
+                    <div class="page-header">
+                        <h2>Platform Statistics</h2>
+                        <p>Comprehensive analytics and insights</p>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="stats-tabs">
+                        <button class="stat-tab active" data-tab="emergency-stats">Emergency Stats</button>
+                        <button class="stat-tab" data-tab="donor-stats">Donor Stats</button>
+                        <button class="stat-tab" data-tab="hospital-stats">Hospital Stats</button>
+                    </div>
+
+                    <!-- Emergency Statistics -->
+                    <div id="emergency-stats" class="stat-content active">
+                        <div class="stat-cards">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Emergencies</div>
+                                <div class="stat-value" id="statTotalEmergencies">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Active Emergencies</div>
+                                <div class="stat-value" id="statActiveEmergencies">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Success Rate</div>
+                                <div class="stat-value" id="statSuccessRate">0%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Avg Response Time</div>
+                                <div class="stat-value" id="statAvgResponseTime">0 min</div>
+                            </div>
+                        </div>
+                        <div class="charts-row">
+                            <div class="chart-container">
+                                <h3>By Urgency Level</h3>
+                                <canvas id="urgencyLevelChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>Most Requested Blood Types</h3>
+                                <canvas id="mostRequestedChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Donor Statistics -->
+                    <div id="donor-stats" class="stat-content">
+                        <div class="stat-cards">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Donors</div>
+                                <div class="stat-value" id="statTotalDonors">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Active Donors</div>
+                                <div class="stat-value" id="statActiveDonors">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Avg Donations</div>
+                                <div class="stat-value" id="statAvgDonations">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Total Donations</div>
+                                <div class="stat-value" id="statTotalDonations">0</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Top 10 Donors</h3>
+                            <div id="topDonorsList" class="top-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hospital Statistics -->
+                    <div id="hospital-stats" class="stat-content">
+                        <div class="stat-cards">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Hospitals</div>
+                                <div class="stat-value" id="statTotalHospitals">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Verified Hospitals</div>
+                                <div class="stat-value" id="statVerifiedHospitals">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Verification Rate</div>
+                                <div class="stat-value" id="statVerificationRate">0%</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Top 10 Hospitals by Requests</h3>
+                            <div id="topHospitalsList" class="top-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs Page -->
+                <div id="logs" class="admin-page">
+                    <div class="page-header">
+                        <h2>System Logs</h2>
+                        <p>Track all system activities and events</p>
+                    </div>
+
+                    <div class="filters-bar">
+                        <input type="text" id="logSearch" placeholder="Search logs..." class="search-input">
+                        <select id="logTypeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="donation">Donation</option>
+                            <option value="user">User Activity</option>
+                        </select>
+                    </div>
+
+                    <div id="logsList" class="logs-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Event Type</th>
+                                    <th>User</th>
+                                    <th>Message</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsBody">
+                                <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settings" class="admin-page">
+                    <div class="page-header">
+                        <h2>Settings</h2>
+                        <p>Platform configuration and preferences</p>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>System Settings</h3>
+                        <div class="setting-item">
+                            <label>Emergency Response Timeout (minutes)</label>
+                            <input type="number" value="60" min="30" max="180">
+                        </div>
+                        <div class="setting-item">
+                            <label>Minimum Donor Qualification Age</label>
+                            <input type="number" value="18" min="16" max="30">
+                        </div>
+                        <div class="setting-item">
+                            <label>Emergency Notification Radius (km)</label>
+                            <input type="number" value="30" min="5" max="100">
+                        </div>
+                        <button class="btn btn-primary">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Hospital Actions -->
+    <div id="hospitalModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Hospital Details</h2>
+            <div id="hospitalDetails"></div>
+            <div class="modal-actions">
+                <button class="btn btn-success" id="verifyHospitalBtn">Verify Hospital</button>
+                <button class="btn btn-danger" id="rejectHospitalBtn">Reject Hospital</button>
+                <button class="btn btn-secondary" onclick="closeModal('hospitalModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for User Actions -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>User Details</h2>
+            <div id="userDetails"></div>
+            <div class="modal-actions">
+                <select id="userStatusSelect" class="modal-select">
+                    <option value="">Change Status</option>
+                    <option value="active">Active</option>
+                    <option value="suspended">Suspend</option>
+                    <option value="banned">Ban</option>
+                </select>
+                <textarea id="reasonTextarea" placeholder="Reason (if applicable)" class="modal-textarea"></textarea>
+                <button class="btn btn-primary" id="updateUserStatusBtn">Update Status</button>
+                <button class="btn btn-danger" id="deleteUserBtn">Delete User</button>
+                <button class="btn btn-secondary" onclick="closeModal('userModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Scripts -->
+    <script src="/js/admin-dashboard.js"></script>
+</body>
+</html>

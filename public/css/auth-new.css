@@ -1,0 +1,776 @@
+/* ============================================
+   BLOODLINK - AUTH PAGES (SIMPLIFIED)
+   Dark Theme - Login & Signup
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0a0f;
+    color: #ffffff;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 20% 20%, rgba(231, 76, 60, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(52, 152, 219, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Auth Wrapper */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+}
+
+/* Left Panel */
+.auth-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px;
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(20, 20, 30, 0.9) 100%);
+}
+
+.auth-logo-section {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(231, 76, 60, 0.4) 0%, transparent 70%);
+    filter: blur(40px);
+}
+
+.logo-circle {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    position: relative;
+    box-shadow: 0 0 50px rgba(231, 76, 60, 0.5);
+}
+
+.logo-circle i {
+    font-size: 40px;
+    color: white;
+}
+
+.auth-logo-section h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.auth-logo-section p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Features List */
+.features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(231, 76, 60, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.feature-icon i {
+    font-size: 20px;
+    color: #e74c3c;
+}
+
+.feature-text h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 2px;
+}
+
+.feature-text p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Signup Info */
+.signup-info {
+    margin-top: 30px;
+}
+
+.signup-info h3 {
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 16px;
+}
+
+.signup-info ul {
+    list-style: none;
+}
+
+.signup-info li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.signup-info li i {
+    color: #e74c3c;
+    font-size: 16px;
+}
+
+/* Right Panel */
+.auth-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 450px;
+    background: rgba(20, 20, 35, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.form-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.form-header p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Role Tabs */
+.role-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px;
+    border-radius: 14px;
+}
+
+.role-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.role-tab:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.role-tab.active {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+.role-tab i {
+    font-size: 16px;
+}
+
+/* Form */
+.modern-form {
+    display: block;
+}
+
+.form-field {
+    margin-bottom: 20px;
+}
+
+.form-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper i:first-child {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.input-wrapper input,
+.input-wrapper select,
+.input-wrapper textarea {
+    width: 100%;
+    padding: 14px 14px 14px 46px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus,
+.input-wrapper textarea:focus {
+    border-color: #e74c3c;
+    background: rgba(231, 76, 60, 0.08);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+}
+
+.input-wrapper input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.input-wrapper select {
+    cursor: pointer;
+    appearance: none;
+}
+
+.input-wrapper textarea {
+    min-height: 100px;
+    resize: vertical;
+    padding-top: 14px;
+}
+
+/* Select wrapper with arrow */
+.select-wrapper::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+}
+
+/* Password toggle */
+.password-wrapper .toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    z-index: 1;
+}
+
+.password-wrapper .toggle-password:hover {
+    color: #e74c3c;
+}
+
+/* Field errors */
+.field-error {
+    display: block;
+    font-size: 12px;
+    color: #e74c3c;
+    margin-top: 6px;
+    min-height: 16px;
+}
+
+.form-field.error input,
+.form-field.error select {
+    border-color: #e74c3c;
+}
+
+/* Form Row (2 columns) */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Conditional Fields */
+.conditional-fields {
+    display: none;
+}
+
+.conditional-fields.active,
+#donorFields {
+    display: block;
+}
+
+#hospitalFields {
+    display: none;
+}
+
+/* Form Options */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #e74c3c;
+    cursor: pointer;
+}
+
+.forgot-link {
+    font-size: 13px;
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4);
+}
+
+.btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 16px 24px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Form Divider */
+.form-divider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+}
+
+.form-divider::before,
+.form-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.form-divider span {
+    padding: 0 16px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+/* Form Footer */
+.form-footer {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.form-footer p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-footer a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Success Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: rgba(20, 20, 35, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 48px;
+    border-radius: 24px;
+    text-align: center;
+}
+
+.modal-content i {
+    font-size: 64px;
+    color: #2ecc71;
+    margin-bottom: 24px;
+}
+
+.modal-content h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.modal-content p {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Password Strength */
+.password-strength {
+    margin-top: 8px;
+}
+
+.strength-bars {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.strength-bar.active { background: #e74c3c; }
+.strength-bar.medium { background: #f39c12; }
+.strength-bar.strong { background: #2ecc71; }
+
+.strength-text {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Loading state */
+.btn-primary.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .auth-wrapper {
+        flex-direction: column;
+    }
+    
+    .auth-left {
+        padding: 40px;
+        min-height: auto;
+    }
+    
+    .features-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-wrapper {
+        min-height: auto;
+    }
+    
+    .auth-left {
+        padding: 30px 20px;
+        display: none; /* Hide left panel on mobile to save space */
+    }
+    
+    .auth-wrapper.signup-wrapper .auth-left {
+        display: block;
+        padding: 20px;
+    }
+    
+    .signup-wrapper .signup-info {
+        display: none;
+    }
+    
+    .auth-right {
+        padding: 20px 16px;
+        min-height: 100vh;
+    }
+    
+    .form-container {
+        padding: 24px 20px;
+        max-width: 100%;
+    }
+    
+    .features-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .role-tabs {
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .role-tab {
+        padding: 12px 16px;
+        font-size: 13px;
+        flex: 1;
+    }
+    
+    .role-tab i {
+        font-size: 16px;
+    }
+    
+    .form-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .form-field {
+        margin-bottom: 16px;
+    }
+    
+    .form-field label {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    
+    .input-wrapper {
+        padding: 12px 14px;
+    }
+    
+    .input-wrapper input,
+    .input-wrapper select {
+        font-size: 14px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    
+    .logo-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .logo-circle i {
+        font-size: 1.5rem;
+    }
+    
+    .auth-logo-section h1 {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-left {
+        display: none;
+    }
+    
+    .auth-right {
+        padding: 16px 12px;
+    }
+    
+    .form-container {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+    
+    .form-header h2 {
+        font-size: 1.25rem;
+    }
+    
+    .form-header p {
+        font-size: 13px;
+    }
+    
+    .role-tabs {
+        gap: 6px;
+    }
+    
+    .role-tab {
+        padding: 10px 12px;
+        font-size: 12px;
+        border-radius: 10px;
+    }
+    
+    .role-tab span {
+        display: none;
+    }
+    
+    .role-tab i {
+        margin-right: 0;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .checkbox-label {
+        font-size: 12px;
+    }
+    
+    .form-divider {
+        margin: 20px 0;
+    }
+    
+    .form-footer p {
+        font-size: 11px;
+    }
+    
+    .social-login {
+        gap: 10px;
+    }
+    
+    .social-btn {
+        padding: 12px;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}

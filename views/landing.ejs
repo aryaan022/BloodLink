@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Real-time Blood Donation Matching</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/landing-ultra.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-droplet"></i>
+                <span>BloodLink</span>
+            </div>
+            <button class="mobile-nav-btn" id="mobileNavBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#about">About</a></li>
+                <li class="auth-buttons">
+                    <a href="/auth/login" class="btn-login">Login</a>
+                    <a href="/auth/signup" class="btn-signup">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section with 3D -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Save Lives, <span>Connect</span> Faster</h1>
+            <p>Real-time blood donation matching platform connecting donors, hospitals, and blood seekers instantly.</p>
+            <div class="cta-buttons">
+                <a href="/auth/signup?role=donor" class="btn btn-primary">I'm a Donor</a>
+                <a href="/auth/signup?role=hospital" class="btn btn-secondary">I'm a Hospital</a>
+            </div>
+        </div>
+        <div class="hero-3d">
+            <canvas id="3d-canvas"></canvas>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2>Why Choose BloodLink?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Real-Time Matching</h3>
+                <p>Instant notifications connect donors with urgent requests within minutes.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-location-dot"></i>
+                <h3>Location-Based</h3>
+                <p>Find donors near you using advanced geolocation and distance algorithms.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Track History</h3>
+                <p>Monitor donation history and maintain complete records for donors.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield"></i>
+                <h3>Secure & Verified</h3>
+                <p>Hospital verification and secure authentication for all users.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps-container">
+            <div class="step">
+                <span class="step-number">1</span>
+                <h3>Register</h3>
+                <p>Sign up as a donor or hospital</p>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <h3>Create/View</h3>
+                <p>Post or find blood requests</p>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <h3>Match</h3>
+                <p>Get matched with available donors</p>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <h3>Donate</h3>
+                <p>Complete donation and save lives</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stat-card">
+            <h3>50K+</h3>
+            <p>Active Donors</p>
+        </div>
+        <div class="stat-card">
+            <h3>100+</h3>
+            <p>Hospitals</p>
+        </div>
+        <div class="stat-card">
+            <h3>1000+</h3>
+            <p>Lives Saved</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 BloodLink. Made with <i class="fas fa-heart"></i> to save lives.</p>
+    </footer>
+
+    <script src="/js/landing-3d-ultra.js"></script>
+</body>
+</html>

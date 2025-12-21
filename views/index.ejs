@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Real-Time Blood Donor Connect System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>🩸 BloodLink</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/requests">View Requests</a></li>
+                <li><a href="/donors">Find Donors</a></li>
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h2>Save Lives, Donate Blood</h2>
+            <p>Connect hospitals, blood donors, and people who need blood</p>
+            <button class="btn btn-primary" onclick="document.location='#about'">Learn More</button>
+        </div>
+    </header>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About BloodLink</h2>
+            <p>
+                BloodLink is a real-time blood donation matching platform that connects hospitals with blood donors
+                and people who need blood. Our mission is to eliminate delays, panic, and misinformation in blood donation.
+            </p>
+            <div class="features">
+                <div class="feature">
+                    <h3>🏥 For Hospitals</h3>
+                    <p>Post urgent blood requirements and find nearby donors instantly</p>
+                </div>
+                <div class="feature">
+                    <h3>🩸 For Donors</h3>
+                    <p>Respond to urgent requests and save lives in your community</p>
+                </div>
+                <div class="feature">
+                    <h3>🔔 Real-Time Alerts</h3>
+                    <p>Get instant notifications for urgent blood requests near you</p>
+                </div>
+                <div class="feature">
+                    <h3>📍 Location-Based</h3>
+                    <p>Find blood requests and donors within your area</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Save Lives?</h2>
+            <a href="/auth/register?type=donor" class="btn btn-primary">Register as Donor</a>
+            <a href="/auth/register?type=hospital" class="btn btn-secondary">Register as Hospital</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 BloodLink. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
