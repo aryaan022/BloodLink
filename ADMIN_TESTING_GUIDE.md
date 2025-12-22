@@ -17,14 +17,12 @@ npm run create-admin
 
 This creates an admin account with:
 - **Email**: admin@bloodlink.com
-- **Password**: Admin@123
+- **Password**: Set during creation (keep secure)
 
 ### 3. Access Admin Dashboard
 1. Go to `http://localhost:5000/`
 2. Click "Admin Login" or navigate to `/auth/login`
-3. Enter admin credentials:
-   - Email: admin@bloodlink.com
-   - Password: Admin@123
+3. Enter your admin credentials
 4. You'll be redirected to `http://localhost:5000/admin/dashboard`
 
 ---

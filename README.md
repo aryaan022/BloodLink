@@ -229,19 +229,19 @@ Create `.env` file in project root:
 
 ```env
 # MongoDB
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bloodlink
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/bloodlink
 
 # JWT Secret (32+ random characters)
-JWT_SECRET=your-very-long-random-secret-key-at-least-32-chars
+JWT_SECRET=<your-secure-random-jwt-secret-min-32-chars>
 
 # Mapbox (get from mapbox.com dashboard)
-MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieXlvdXJfdXNlcm5hbWUiLCJhIjoiY2xleGFtcGxlIn0...
+MAPBOX_ACCESS_TOKEN=<your-mapbox-access-token>
 
 # Gmail SMTP (use app-specific password, not regular password)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-specific-password
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-gmail-app-password>
 
 # Application
 CLIENT_URL=http://localhost:5000
@@ -539,13 +539,13 @@ npm start
 PORT=5000
 NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/bloodlink
-JWT_SECRET=your_secret_key
+JWT_SECRET=<your-secure-jwt-secret>
 JWT_EXPIRE=7d
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
-GOOGLE_MAPS_API_KEY=your_api_key
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-gmail-app-password>
+GOOGLE_MAPS_API_KEY=<your-google-maps-api-key>
 CLIENT_URL=http://localhost:5000
 ```
 
@@ -611,9 +611,9 @@ node scripts/createAdminUser.js
 
 This creates an admin account with:
 - Email: `admin@bloodlink.com`
-- Password: `Admin@123`
+- Password: `<set-during-creation>`
 
-⚠️ **IMPORTANT**: Change the password immediately after first login!
+⚠️ **IMPORTANT**: Use a strong password and keep it secure!
 
 2. **Access Admin Dashboard**:
    - Navigate to `http://localhost:3000/admin/dashboard`

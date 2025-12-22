@@ -64,7 +64,7 @@ The **Admin Dashboard** for BloodLink has been successfully implemented with pro
 6. **scripts/createAdminUser.js** (50 lines)
    - Automated admin account creation
    - Run with: `npm run create-admin`
-   - Default credentials: admin@bloodlink.com / Admin@123
+   - Credentials set during creation (keep secure)
 
 ### Files Modified (3)
 
@@ -220,9 +220,8 @@ npm run create-admin
 ```
 ✅ Admin user created successfully!
 Email: admin@bloodlink.com
-Password: Admin@123
 
-⚠️  IMPORTANT: Change the password after first login!
+⚠️  IMPORTANT: Keep your admin password secure!
 ```
 
 ### Step 4: Start Server
@@ -234,9 +233,7 @@ Server runs on `http://localhost:5000`
 
 ### Step 5: Login to Admin Dashboard
 1. Go to `http://localhost:5000/auth/login`
-2. Enter credentials:
-   - Email: `admin@bloodlink.com`
-   - Password: `Admin@123`
+2. Enter your admin credentials
 3. Click Login
 4. Redirected to `http://localhost:5000/admin/dashboard`
 
@@ -269,7 +266,7 @@ npm run create-admin
 npm start
 
 # 3. In browser: http://localhost:5000/auth/login
-# 4. Login with admin@bloodlink.com / Admin@123
+# 4. Login with your admin credentials
 # 5. Navigate to /admin/dashboard
 # 6. Test each feature:
 #    - Dashboard metrics load
@@ -415,9 +412,9 @@ All endpoints require: `Authorization: Bearer <token>` header
 
 ## 🚨 Important Notes
 
-⚠️ **Change Default Admin Password**
-- Default: `Admin@123`
-- Change immediately after first login for security
+⚠️ **Admin Password Security**
+- Use a strong, unique password for the admin account
+- Keep credentials secure and do not share
 
 ⚠️ **Database Requirements**
 - MongoDB must be running

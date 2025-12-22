@@ -46,7 +46,7 @@ Ctrl+Shift+Delete → Clear All → All time
 ```
 URL: http://localhost:5000/auth/login
 Email: admin@bloodlink.com
-Password: Admin@123
+Password: <your-admin-password>
 ```
 
 ### 3. Expected Redirect
@@ -132,8 +132,7 @@ JSON.parse(localStorage.getItem('bloodlink_user')).userType
 | Field | Value |
 |-------|-------|
 | Email | admin@bloodlink.com |
-| Password | Admin@123 |
-| ⚠️ Change Password | After first login |
+| Password | Set during admin user creation |
 
 ---
 

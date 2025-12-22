@@ -55,7 +55,7 @@ Safari: Command+Y then clear
 1. Go to `http://localhost:5000/auth/login`
 2. Enter:
    - **Email**: admin@bloodlink.com
-   - **Password**: Admin@123
+   - **Password**: Your admin password
 3. Click **Sign In**
 4. You should be **redirected to** `/admin/dashboard`
 
@@ -86,7 +86,7 @@ After applying the fix:
 - [ ] Close all browser tabs with localhost:5000
 - [ ] Refresh the page or open new tab
 - [ ] Go to login page (`/auth/login`)
-- [ ] Login with admin@bloodlink.com / Admin@123
+- [ ] Login with your admin credentials
 - [ ] Redirected to `/admin/dashboard` ✅
 - [ ] Dashboard metrics load
 - [ ] Can navigate all pages
@@ -212,7 +212,7 @@ npm start
 # 4. In browser:
 # - Clear cache (Ctrl+Shift+Delete)
 # - Go to http://localhost:5000/auth/login
-# - Login with admin@bloodlink.com / Admin@123
+# - Login with your admin credentials
 # - Should redirect to /admin/dashboard
 ```
 
@@ -223,8 +223,7 @@ npm start
 | Field | Value |
 |-------|-------|
 | **Email** | admin@bloodlink.com |
-| **Password** | Admin@123 |
-| **⚠️ Important** | Change password after first successful login |
+| **Password** | Set during admin user creation |
 
 ---
 
@@ -235,7 +234,6 @@ npm start
 3. ✅ Test hospital verification
 4. ✅ Test user management
 5. ✅ Test statistics pages
-6. ✅ Change admin password for security
 
 ---
 
@@ -249,7 +247,7 @@ The admin login issue has been fixed. The problem was that the login form wasn't
 
 **Test immediately by:**
 1. Clearing browser cache
-2. Logging in with admin@bloodlink.com / Admin@123
+2. Logging in with your admin credentials
 3. Should redirect to `/admin/dashboard`
 
 If issues persist, run the verification checks above.

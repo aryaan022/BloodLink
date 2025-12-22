@@ -405,7 +405,7 @@ npm run create-admin
 
 Creates admin account:
 - Email: `admin@bloodlink.com`
-- Password: `Admin@123` (change after login)
+- Password: Set during creation (keep secure)
 
 ### 2. Start Server
 ```bash
@@ -418,9 +418,6 @@ Server runs on `http://localhost:5000`
 1. Navigate to `http://localhost:5000/auth/login`
 2. Login with admin credentials
 3. Redirected to `/admin/dashboard`
-
-### 4. Change Admin Password (Recommended)
-- Implement password change feature for security
 
 ---
 
