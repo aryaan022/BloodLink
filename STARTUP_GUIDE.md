@@ -14,7 +14,7 @@
 
 ### 1.1 Install Dependencies
 ```bash
-cd "c:\Users\aryan\OneDrive\Desktop\Blood link"
+cd /path/to/bloodlink
 npm install
 ```
 

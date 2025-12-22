@@ -103,7 +103,7 @@ JSON.parse(localStorage.getItem('bloodlink_user')).userType  // Should be 'admin
 ### Debug Step 3: Check Admin User
 In terminal (new window):
 ```bash
-cd "c:\Users\aryan\OneDrive\Desktop\Blood link"
+cd /path/to/bloodlink
 node scripts/checkAdminUser.js
 ```
 
