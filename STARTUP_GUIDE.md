@@ -14,7 +14,7 @@
 
 ### 1.1 Install Dependencies
 ```bash
-cd "c:\Users\aryan\OneDrive\Desktop\Blood link"
+cd /path/to/bloodlink
 npm install
 ```
 
@@ -35,19 +35,19 @@ Create file at root: `.env`
 
 ```env
 # MongoDB Connection
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bloodlink
+MONGODB_URI=<your-mongodb-uri>
 
 # JWT Secret (minimum 32 characters, use random string)
-JWT_SECRET=your-very-long-random-secret-key-at-least-32-chars-12345
+JWT_SECRET=<your-secure-random-jwt-secret-min-32-chars>
 
 # Mapbox Token (get from mapbox.com)
-MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieXlvdXJfdXNlcm5hbWUiLCJhIjoiY2xleGFtcGxlIn0.ExampleToken123456789
+MAPBOX_ACCESS_TOKEN=<your-mapbox-access-token>
 
 # Gmail SMTP Configuration
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-gmail-app-password>
 
 # Application URLs
 CLIENT_URL=http://localhost:5000
@@ -70,7 +70,7 @@ PORT=5000
 **Example**:
 ```
 SMTP_USER=bloodlink.notify@gmail.com
-SMTP_PASS=abcd efgh ijkl mnop  (16 chars with spaces)
+SMTP_PASS=<your-16-char-gmail-app-password>
 ```
 
 ### 1.4 MongoDB Setup
@@ -79,7 +79,7 @@ SMTP_PASS=abcd efgh ijkl mnop  (16 chars with spaces)
 1. Create account at https://mongodb.com/cloud/atlas
 2. Create cluster (free tier available)
 3. Create database user with password
-4. Get connection string: `mongodb+srv://username:password@cluster.mongodb.net/bloodlink`
+4. Get connection string: `mongodb+srv://<username>:<password>@<cluster>.mongodb.net/bloodlink`
 5. Add to `.env` as `MONGODB_URI`
 
 **Using Local MongoDB**:
@@ -193,7 +193,7 @@ Donor Login: http://localhost:5000/auth/login
 2. Select "Hospital"
 3. Fill form with test data:
    - Email: hospital@test.com
-   - Password: Test@1234
+   - Password: <your-test-password>
    - Hospital Name: Test Hospital
    - License: TEST123456
    - Contact: +1234567890
@@ -204,7 +204,7 @@ Donor Login: http://localhost:5000/auth/login
 2. Select "Donor"
 3. Fill form:
    - Email: donor@test.com
-   - Password: Test@1234
+   - Password: <your-test-password>
    - Name: Test Donor
    - Blood Type: O+
    - Age: 25
@@ -325,8 +325,8 @@ mongosh "your-mongodb-uri"
 
 # 4. Check .env file syntax
 # Make sure no spaces around = signs
-# Correct: MONGODB_URI=mongodb+srv://...
-# Wrong: MONGODB_URI = mongodb+srv://...
+# Correct: MONGODB_URI=<your-mongodb-uri>
+# Wrong: MONGODB_URI = <your-mongodb-uri>
 ```
 
 ### Problem: Socket.io Not Connected
@@ -402,8 +402,8 @@ navigator.geolocation.getCurrentPosition(
 # Check .env has:
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=16-char-app-password
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-16-char-gmail-app-password>
 
 # 2. Verify app password (NOT regular password)
 # Go to: https://myaccount.google.com/apppasswords
@@ -486,15 +486,15 @@ PORT=5000
 CLIENT_URL=http://localhost:5000
 MONGODB_URI=mongodb://localhost:27017/bloodlink
 # OR for Atlas:
-MONGODB_URI=mongodb+srv://dev_user:dev_pass@test-cluster.mongodb.net/bloodlink
+MONGODB_URI=<your-mongodb-atlas-uri>
 ```
 
 ### Testing Setup
 ```env
 NODE_ENV=testing
 PORT=5001
-MONGODB_URI=mongodb+srv://test_user:test_pass@test-cluster.mongodb.net/bloodlink_test
-SMTP_USER=test.notifications@gmail.com
+MONGODB_URI=<your-test-mongodb-uri>
+SMTP_USER=<your-test-email@gmail.com>
 ```
 
 ### Production Setup (before deploying)
@@ -502,9 +502,9 @@ SMTP_USER=test.notifications@gmail.com
 NODE_ENV=production
 PORT=3000
 CLIENT_URL=https://bloodlink-app.com
-MONGODB_URI=mongodb+srv://prod_user:prod_pass@prod-cluster.mongodb.net/bloodlink
+MONGODB_URI=<your-production-mongodb-uri>
 SMTP_USER=noreply@bloodlink-app.com
-JWT_SECRET=generate-very-long-random-secret-here-min-32-chars
+JWT_SECRET=<your-production-jwt-secret-min-32-chars>
 # Rest same as dev
 ```
 
@@ -577,13 +577,13 @@ npm install compression
 ```bash
 # Atlas: Automated backups available in Atlas dashboard
 # Local MongoDB:
-mongodump --uri="mongodb://localhost:27017/bloodlink"
+mongodump --uri="<your-mongodb-uri>"
 # Creates backup in ./dump/ folder
 ```
 
 ### Restore from Backup
 ```bash
-mongorestore --uri="mongodb://localhost:27017/bloodlink" ./dump/bloodlink
+mongorestore --uri="<your-mongodb-uri>" ./dump/bloodlink
 ```
 
 ---

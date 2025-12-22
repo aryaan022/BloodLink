@@ -46,14 +46,14 @@
 ### 1. Environment Configuration
 ```bash
 # Verify .env file exists and contains:
-MONGODB_URI=mongodb://localhost:27017/bloodlink
-JWT_SECRET=<secure-random-string>
+MONGODB_URI=<your-mongodb-uri>
+JWT_SECRET=<your-secure-random-string-min-32-chars>
 NODE_ENV=production  # Change this for production
 PORT=5000
 SMTP_HOST=smtp.gmail.com
-SMTP_USER=<email>
-SMTP_PASS=<app-password>
-MAPBOX_ACCESS_TOKEN=<token>
+SMTP_USER=<your-email>
+SMTP_PASS=<your-gmail-app-password>
+MAPBOX_ACCESS_TOKEN=<your-mapbox-token>
 ```
 
 ### 2. Dependencies Installed
@@ -76,7 +76,6 @@ npm run create-admin
 # Output should show:
 # ✅ Admin user created successfully!
 # Email: admin@bloodlink.com
-# Password: Admin@123
 ```
 
 ### 5. Server Starts Successfully
@@ -88,7 +87,7 @@ npm start
 
 ### 6. Admin Dashboard Accessible
 - [ ] Navigate to http://localhost:5000/admin/dashboard
-- [ ] Login with admin@bloodlink.com / Admin@123
+- [ ] Login with your admin credentials
 - [ ] Redirect to dashboard successful
 - [ ] All pages load without errors
 
@@ -109,7 +108,7 @@ npm start
 ### Step 1: Backup Database
 ```bash
 # Backup existing MongoDB
-mongodump --uri=mongodb://localhost:27017/bloodlink --out=./backup
+mongodump --uri=<your-mongodb-uri> --out=./backup
 ```
 
 ### Step 2: Update Environment
@@ -117,7 +116,7 @@ mongodump --uri=mongodb://localhost:27017/bloodlink --out=./backup
 # Set to production mode
 NODE_ENV=production
 PORT=5000  # or your production port
-JWT_SECRET=<new-secure-secret>
+JWT_SECRET=<your-new-secure-secret-min-32-chars>
 ```
 
 ### Step 3: Install Production Dependencies
@@ -147,7 +146,7 @@ curl http://localhost:5000/api/admin/dashboard \
 ## 🔒 Security Verification
 
 ### Password Management
-- [ ] Admin password changed from default
+- [ ] Admin password is strong and secure
 - [ ] No passwords in .env file
 - [ ] No hardcoded secrets in code
 - [ ] JWT_SECRET is strong (32+ characters)

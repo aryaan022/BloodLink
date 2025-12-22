@@ -129,19 +129,19 @@ Donor Dashboard
 
 ```env
 # MongoDB
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bloodlink
+MONGODB_URI=<your-mongodb-uri>
 
 # JWT
-JWT_SECRET=your-super-secret-key-min-32-chars-long
+JWT_SECRET=<your-secure-jwt-secret-min-32-chars>
 
 # Mapbox
-MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieXourv...full-token...
+MAPBOX_ACCESS_TOKEN=<your-mapbox-access-token>
 
 # Gmail SMTP (for Email Notifications)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password (NOT regular password, use Gmail app password)
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-gmail-app-password>
 
 # Frontend URL (used in email links)
 CLIENT_URL=http://localhost:5000
@@ -423,7 +423,7 @@ npm start
 #   "MongoDB connected"
 
 # Test MongoDB connection
-mongosh "mongodb+srv://..." --username admin
+mongosh "<your-mongodb-uri>" --username <your-username>
 
 # Test Socket.io
 # Open browser console and type:

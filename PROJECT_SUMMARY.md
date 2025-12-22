@@ -335,13 +335,13 @@ await sendEmail(
 
 **Required .env Variables**:
 ```env
-MONGODB_URI=mongodb+srv://...
-JWT_SECRET=min-32-chars-random-string
-MAPBOX_ACCESS_TOKEN=pk.eyJ...
+MONGODB_URI=<your-mongodb-uri>
+JWT_SECRET=<your-secure-jwt-secret-min-32-chars>
+MAPBOX_ACCESS_TOKEN=<your-mapbox-access-token>
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=email@gmail.com
-SMTP_PASS=app-password-16-chars
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-gmail-app-password>
 CLIENT_URL=http://localhost:5000
 NODE_ENV=development
 PORT=5000
@@ -349,8 +349,8 @@ PORT=5000
 
 **Important Notes**:
 - SMTP_PASS must be Gmail app-specific password (not regular password)
-- JWT_SECRET should be random and secure
-- MAPBOX_ACCESS_TOKEN starts with pk.eyJ
+- JWT_SECRET should be random and secure (minimum 32 characters)
+- MAPBOX_ACCESS_TOKEN is your Mapbox public access token
 - Coordinates always [longitude, latitude] in GeoJSON format
 
 ---

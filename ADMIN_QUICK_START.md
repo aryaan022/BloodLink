@@ -15,7 +15,7 @@ npm start
 ### 3. Login
 - URL: `http://localhost:5000/admin/dashboard`
 - Email: `admin@bloodlink.com`
-- Password: `Admin@123`
+- Password: `<your-admin-password>`
 
 ---
 
@@ -104,10 +104,10 @@ npm start
 ## 🐛 Troubleshooting
 
 ### Can't Login
-- Check email: `admin@bloodlink.com`
-- Check password: `Admin@123`
+- Verify your admin email and password
 - Ensure MongoDB is running
 - Check .env MONGODB_URI
+- Ensure admin user was created successfully
 
 ### Dashboard Not Loading
 - Clear browser cache
@@ -136,7 +136,7 @@ npm start
 
 ### Default Admin Credentials
 - Email: `admin@bloodlink.com`
-- Password: `Admin@123` ⚠️ Change this!
+- Password: Set during admin user creation
 
 ### Commands
 ```bash
@@ -203,7 +203,7 @@ After setup, test these features:
 ## 🚀 Going Live
 
 Before production:
-1. [ ] Change admin password
+1. [ ] Use a strong admin password
 2. [ ] Update .env with production values
 3. [ ] Set NODE_ENV=production
 4. [ ] Enable HTTPS
@@ -230,8 +230,7 @@ Before production:
 2. ✅ Start server - `npm start`
 3. ✅ Login to dashboard
 4. ✅ Test each feature
-5. ✅ Change default password
-6. ✅ Deploy to production
+5. ✅ Use a strong password for security
 
 ---
 

@@ -64,7 +64,7 @@ Click: Clear data
 2. Go to `http://localhost:5000/auth/login`
 3. Enter:
    - Email: `admin@bloodlink.com`
-   - Password: `Admin@123`
+   - Password: Your admin password
 4. Click **Sign In**
 
 ### Expected Result
@@ -103,7 +103,7 @@ JSON.parse(localStorage.getItem('bloodlink_user')).userType  // Should be 'admin
 ### Debug Step 3: Check Admin User
 In terminal (new window):
 ```bash
-cd "c:\Users\aryan\OneDrive\Desktop\Blood link"
+cd /path/to/bloodlink
 node scripts/checkAdminUser.js
 ```
 
@@ -130,7 +130,7 @@ Terminal should show:
 ```
 1. User goes to /auth/login
    ↓
-2. Enters admin@bloodlink.com & Admin@123
+2. Enters admin credentials
    ↓
 3. Login form submits to /api/auth/login
    ↓
@@ -176,7 +176,7 @@ Terminal should show:
 | Item | Value |
 |------|-------|
 | Admin Email | admin@bloodlink.com |
-| Admin Password | Admin@123 |
+| Admin Password | Set during admin user creation |
 | Dashboard URL | http://localhost:5000/admin/dashboard |
 | Token Storage Key | bloodlink_token |
 | User Storage Key | bloodlink_user |
@@ -212,13 +212,12 @@ Terminal should show:
 1. ✅ Clear browser cache (Ctrl+Shift+Delete)
 2. ✅ Close all browser tabs
 3. ✅ Go to http://localhost:5000/auth/login
-4. ✅ Login with admin@bloodlink.com / Admin@123
+4. ✅ Login with your admin credentials
 5. ✅ Should redirect to /admin/dashboard
 6. ✅ Dashboard should load with all data
 7. ✅ Test hospital verification
 8. ✅ Test user management
 9. ✅ Test statistics pages
-10. ✅ Change password (optional but recommended)
 
 ---
 
