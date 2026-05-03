@@ -47,12 +47,14 @@ app.use(cors({
   credentials: true
 }));
 
+const path = require('path');
+
 // Set view engine
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set('views', path.join(__dirname, '../views'));
 
 // Static files
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // =============== ROUTES ===============
 
@@ -146,16 +148,18 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
-  console.log(`
+if (!process.env.VERCEL) {
+  server.listen(PORT, () => {
+    console.log(`
 ╔═══════════════════════════════════════╗
 ║          🩸 BLOODLINK SERVER 🩸       ║
 ║                                       ║
 ║  🚀 Server running on port ${PORT}     ║
-║  🌐 Environment: ${process.env.NODE_ENV}        ║
+║  🌐 Environment: ${process.env.NODE_ENV || 'development'}        ║
 ║                                       ║
 ╚═══════════════════════════════════════╝
-  `);
-});
+    `);
+  });
+}
 
-module.exports = { app, io };
+module.exports = app;
