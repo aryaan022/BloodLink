@@ -1,446 +1,623 @@
-# BloodLink
-## Blood Donation Emergency Response System
+# BloodLink - Blood Donation Emergency Response System
 
-> **Save Lives in Real-Time**  
-> A production-ready blood donation platform connecting donors with hospitals during critical blood shortages through real-time notifications, intelligent geolocation matching, and community-driven engagement.
+A production-ready blood donation management system with emergency blood request, real-time notifications, Mapbox location visualization, and donor gamification with badges and certificates.
 
----
-
-## 🚀 Getting Started
-
-### Quick Setup
+## ⚡ Quick Start
 
 ```bash
 npm install
+# Create .env file (see STARTUP_GUIDE.md)
 npm start
 ```
 
-The application will be available at `http://localhost:3000`
-
-### Prerequisites
-- Node.js v14+ and npm
-- MongoDB instance
-- Gmail account (for email notifications)
-- Mapbox API key
-
-### Environment Configuration
-
-Create a `.env` file in the root directory:
-
-```env
-# Server
-PORT=3000
-NODE_ENV=production
-
-# Database
-MONGODB_URI=mongodb://localhost:27017/bloodlink
-
-# JWT
-JWT_SECRET=your-secret-key-here
-
-# Email Service
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
-
-# Mapbox
-MAPBOX_TOKEN=your-mapbox-token
-```
+See [STARTUP_GUIDE.md](STARTUP_GUIDE.md) for complete setup instructions.
 
 ---
 
-## 💡 Key Features
+## 📚 Documentation
 
-### 🚨 Emergency Blood Request System
-- Hospital creates emergency requests for critical blood shortages
-- Real-time socket.io notifications to eligible donors within 30km radius
-- Multi-channel alerts: banner + email + sound notifications
-- One-click response interface with Mapbox integration
-- Automatic response tracking and donation management
-- Real-time dashboard updates for hospital coordinators
+| Document | Purpose |
+|----------|---------|
+| [STARTUP_GUIDE.md](STARTUP_GUIDE.md) | Step-by-step setup & configuration |
+| [TEST_SCENARIO.md](TEST_SCENARIO.md) | End-to-end testing workflows |
+| [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | API reference & debugging |
+| [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) | Technical architecture & details |
 
-### 🗺️ Mapbox Location Visualization
-- Live emergency map with hospital and donor locations
-- Red pulsing markers for emergency hospitals
-- Blue markers showing donor positions
-- Interactive popups with immediate response options
-- Auto-centering map with bounds fitting
+---
 
-### 📍 Smart Geolocation Matching
-- Browser-based automatic location capture
-- Intelligent 30km radius donor matching algorithm
-- Distance-based eligibility filtering
-- Privacy-respecting location handling
-- Real-time map synchronization
+## 🎯 Core Features
 
-### 📧 Email Notification System
-- Professional HTML email templates
-- Critical information highlighting for emergencies
-- Direct action links to dashboard
-- Configurable Gmail SMTP integration
-- Automatic retries on failure
+### 1. Emergency Blood Request System ✅
+- Hospital creates emergency request for critical blood needs
+- **Real-time socket.io notification** to eligible donors within 30km
+- **Email alerts** with professional HTML template
+- **Sound alert** (800Hz emergency beep)
+- **One-click response** from interactive Mapbox
+- **Automatic tracking** of responders and donations
+- **Instant badge & points** awarded on completion
 
-### 🏅 Gamification & Badges
+### 2. Mapbox Location Visualization ✅
+- **Live emergency map** showing hospital location (red pulsing marker)
+- **Donor location** displayed in blue
+- **Auto-fit bounds** to show all emergencies
+- **Interactive popups** with hospital info and respond button
+- **Real-time marker updates** as emergencies change
+
+### 3. Geolocation Auto-Capture ✅
+- Browser automatically captures donor location on dashboard load
+- Location stored in database: `User.location.coordinates [longitude, latitude]`
+- POSTs to `/api/donor/update-location` endpoint
+- Used for 30km radius matching of eligible donors
+- Updates Mapbox visualization in real-time
+
+### 4. Email Notifications ✅
+- Professional HTML email template for emergency requests
+- Contains: Hospital name, blood type, units, patient condition, time limit, contact
+- Direct action link to dashboard
+- Sent via Gmail SMTP (configurable)
+
+### 5. Donor Badges & Gamification ✅
 - **Life Saver**: First emergency donation
-- **Quick Response**: Donated within 15 minutes
-- **Consistent Donor**: 10+ total donations
-- **Hero Donor**: 50+ total donations
-- **Rare Blood Defender**: 5+ donations of rare blood types
-- Real-time badge unlocking on achievement
-- Progress tracking for locked badges
+- **Quick Response**: Responded within 15 minutes
+- **Consistent Donor**: 10+ donations
+- **Hero Donor**: 50+ donations
+- **Rare Blood Defender**: 5 donations of O- or AB+
+- Auto-awarded on donation completion
+- Display on dashboard with unlock criteria for locked badges
 
-### 📜 Donation Certificates
-- Automated PDF generation after each donation
-- Professional certificate design with official branding
-- Complete donation details and verification
-- Downloadable history and archiving
+### 6. Donation Certificates ✅
+- PDF certificate generated after each donation
+- Contains: Donor name, blood type, date, amount, hospital name
+- Downloadable from "My Certificates" section
+- Official BloodLink formatting
 
-### 🎯 Points & Recognition System
+### 7. Points & Leaderboard ✅
 - Base donation: 100 points
 - Emergency bonus: +200 points
-- Quick response bonus: +100 points
-- Milestone rewards: +50 points per 10 donations
-- Real-time leaderboard rankings
-- Public donor recognition
+- Quick response: +100 points
+- Milestone bonuses: +50 every 10 donations
+- Real-time leaderboard updates
+- Donor ranking on dashboard
 
 ---
 
-## 🏗️ How It Works
+## 🏗️ System Architecture
 
-**The Emergency Response Flow:**
-
-1. **Emergency Created** → Hospital submits blood request with location
-2. **Donor Matching** → System identifies donors within 30km with compatible blood type
-3. **Real-Time Alert** → Socket.io sends instant notification with audio + visual alert
-4. **Map Visualization** → Emergency location displayed on interactive map
-5. **Auto-Geolocation** → Donor's location captured automatically
-6. **One-Click Response** → Donor responds directly from map popup
-7. **Instant Confirmation** → Hospital notified of response
-8. **Badges Awarded** → System automatically grants achievement badges
-9. **Points Credited** → Donation points added to leaderboard
-10. **Certificate Generated** → Professional PDF created and stored
+```
+Hospital Creates Emergency
+    ↓
+Express Server matches eligible donors (blood type + location within 30km)
+    ↓
+Socket.io emits 'emergencyAlert' event in real-time
+Email sent via Nodemailer
+    ↓
+Donor receives notification:
+  - Red alert banner appears
+  - 800Hz emergency sound plays
+  - Mapbox updates with emergency location
+  - Browser requests geolocation permission
+    ↓
+Donor's location captured via navigator.geolocation
+    ↓
+Location POSTed to /api/donor/update-location
+    ↓
+Mapbox refreshes to show donor location (blue marker)
+    ↓
+Donor clicks red marker → Popup opens
+Donor clicks "Respond to Emergency" button
+    ↓
+Backend records response, notifies hospital
+    ↓
+Hospital sees responder in dashboard
+Hospital marks donation as complete
+    ↓
+System:
+  - Creates DonationHistory record
+  - Awards badge (Life Saver, Quick Response, etc.)
+  - Calculates points (100 + 200 + 100 = 400+)
+  - Generates PDF certificate
+  - Updates leaderboard
+  - Creates thank-you notification
+    ↓
+Donor sees:
+  - New badge in "My Achievements"
+  - Points increased on leaderboard
+  - Certificate available in "My Certificates"
+  - Thank you notification with email
+```
 
 ---
 
 ## 🔧 Technology Stack
 
-**Backend Infrastructure:**
-- Node.js + Express.js - Server framework
-- MongoDB + Mongoose - Document database
-- Socket.io v4 - Real-time bidirectional communication
-- JWT - Secure authentication
-- bcryptjs - Password encryption
-- Nodemailer - Email service
+**Backend**:
+- Node.js + Express.js
+- MongoDB + Mongoose
+- Socket.io v4.6.1 (real-time)
+- Nodemailer (email)
+- JWT (authentication)
+- bcryptjs (password hashing)
 
-**Frontend Stack:**
-- EJS Templates - Server-side rendering
-- Vanilla JavaScript - No dependencies, lightweight
-- Socket.io Client - Real-time updates
-- Mapbox GL JS v2.15+ - Interactive maps
-- Browser Geolocation API - Location services
-- Web Audio API - Sound notifications
+**Frontend**:
+- EJS templates
+- Vanilla JavaScript (no jQuery)
+- Socket.io client
+- Mapbox GL JS v2.15.0
+- Browser Geolocation API
+- Web Audio API (for sound)
 
-**External Integrations:**
-- Mapbox - Advanced mapping and geolocation
-- Gmail SMTP - Professional email delivery
-- MongoDB Atlas - Cloud database (optional)
-
----
-
-## � API Endpoints
-
-### Emergency Management
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/emergency/create` | Create new emergency request |
-| GET | `/api/emergency/active` | Retrieve all active emergencies |
-| GET | `/api/emergency/:id` | Get specific emergency details |
-| POST | `/api/emergency/:id/respond` | Submit donor response |
-| PUT | `/api/emergency/:id/complete` | Mark donation as completed |
-
-### Donor Operations
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/donor/update-location` | Update donor GPS coordinates |
-| GET | `/api/donor/badges` | Get earned badges |
-| GET | `/api/donor/certificates` | Retrieve donation certificates |
-| GET | `/api/donor/leaderboard` | Get current rankings |
-
-### Hospital Dashboard
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/hospital/responders` | View emergency responders |
-| PUT | `/api/hospital/request/:id` | Update emergency request |
-| GET | `/api/hospital/blood-stock` | Check blood inventory |
+**External Services**:
+- Mapbox (location visualization) - `pk.eyJ...` token required
+- Gmail SMTP (email notifications) - App password required
+- MongoDB Atlas (cloud database) - Connection string required
 
 ---
 
-## 📁 Project Structure
+## ✨ What's New in This Release
 
-```
-src/
-├── controllers/
-│   ├── emergencyController.js    # Emergency creation & management
-│   ├── donorController.js        # Donor operations
-│   ├── hospitalController.js     # Hospital features
-│   └── adminController.js        # Admin functions
-├── routes/
-│   ├── emergencyRoutes.js
-│   ├── donorRoutes.js
-│   ├── hospitalRoutes.js
-│   └── adminRoutes.js
-├── models/
-│   ├── User.js                   # User accounts
-│   ├── EmergencyRequest.js       # Emergency records
-│   ├── DonationHistory.js        # Donation tracking
-│   ├── Badge.js                  # Achievement badges
-│   └── Notification.js           # User notifications
-├── middleware/
-│   ├── auth.js                   # JWT authentication
-│   └── errorHandler.js           # Error handling
-└── utils/
-    └── emailService.js           # Email sending
-
-public/js/
-├── donor-dashboard.js            # Donor UI & socket.io
-├── hospital-dashboard.js         # Hospital UI
-├── mapbox-emergency.js           # Map functionality
-└── auth.js                       # Authentication
-
-views/
-├── login.ejs
-├── donor-dashboard.ejs
-└── hospital-dashboard.ejs
+### Real-Time Socket.io System
+```javascript
+// Emergency created → Socket event emitted to all eligible donors
+socket.on('emergencyAlert', (data) => {
+  // Donor receives: {emergencyId, hospitalName, bloodGroup, ...}
+  // UI automatically: shows banner, plays sound, updates map
+});
 ```
 
----
+### Mapbox Emergency Visualization
+```javascript
+// Donor dashboard shows live emergency map
+- Blue marker: Your current location
+- Red pulsing marker: Emergency hospital location
+- Click marker → See full emergency details
+- Click button → One-click respond (no form to fill)
+```
 
-## 🚀 Core Functionality
+### Auto Geolocation Capture
+```javascript
+// On dashboard load, automatically:
+navigator.geolocation.getCurrentPosition(position => {
+  POST /api/donor/update-location with {latitude, longitude}
+  // Then Mapbox refreshes to show your position
+});
+```
 
-### Emergency Request Creation
-Hospital staff can quickly create emergency blood requests with:
-- Blood type selection (A, B, AB, O ± Rh)
+### Emergency Email Template
+Professional HTML email containing:
+- Hospital name & logo
+- Blood type needed (large, red)
 - Units required
-- Urgency level
-- Patient information
-- Location services
+- Patient condition
+- Time limit (highlighted in red)
+- Hospital contact phone (clickable tel: link)
+- Direct "RESPOND TO EMERGENCY" button linking to dashboard
 
-### Real-Time Donor Notifications
-- Socket.io ensures sub-second delivery
-- Email backup for offline users
-- Audio alert (emergency beep)
-- Visual banner with request details
-- Automatic geolocation triggering
-
-### Interactive Emergency Map
-- Mapbox integration for precise mapping
-- Hospital location (red pulsing marker)
-- Donor location (blue marker)
-- Distance calculation
-- One-click response popup
-
-### Donation Management
-- Response tracking from hospital side
-- Donation completion marking
-- Blood unit confirmation
-- Health screening records
-- Follow-up notifications
-
-### Achievements & Recognition
-- Automatic badge awarding
-- Points calculation
-- Leaderboard rankings
-- Certificate generation
-- Social sharing options
+### Badge Auto-Awarding
+```javascript
+// After hospital completes donation:
+await DonorBadge.checkAndAwardBadges(donorId, {
+  donationCount: N,
+  isEmergency: true,
+  responseTime: milliseconds
+});
+// System checks criteria and creates badge record
+// Notification sent to donor
+// Dashboard updates in real-time
+```
 
 ---
 
-## 📝 Configuration Files
+## 📝 Complete API Endpoints
 
-### Required: `.env`
+| Method | Endpoint | Auth | Purpose |
+|--------|----------|------|---------|
+| POST | /api/emergency/create | Hospital | Create emergency request |
+| GET | /api/emergency/active | Public | Get all active emergencies |
+| GET | /api/emergency/:id | Public | Get emergency details |
+| POST | /api/emergency/:id/respond | Donor | Donor responds to emergency |
+| PUT | /api/emergency/:id/complete-donation | Hospital | Complete donation, award badges |
+| POST | /api/donor/update-location | Donor | Update donor location coordinates |
+| GET | /api/mapbox-token | Public | Get Mapbox access token |
+
+See [QUICK_REFERENCE.md](QUICK_REFERENCE.md#api-endpoints-summary) for complete endpoint list.
+
+---
+
+## 🔐 Environment Setup
+
+Create `.env` file in project root:
+
 ```env
-# Server Configuration
-PORT=3000
-NODE_ENV=production
+# MongoDB
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/bloodlink
 
-# Database
-MONGODB_URI=mongodb://localhost:27017/bloodlink
+# JWT Secret (32+ random characters)
+JWT_SECRET=<your-secure-random-jwt-secret-min-32-chars>
 
-# Authentication
-JWT_SECRET=your-secret-key-min-32-chars
-JWT_EXPIRE=7d
+# Mapbox (get from mapbox.com dashboard)
+MAPBOX_ACCESS_TOKEN=<your-mapbox-access-token>
 
-# Email Service
+# Gmail SMTP (use app-specific password, not regular password)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-
-# External APIs
-MAPBOX_TOKEN=pk.your-mapbox-token
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-gmail-app-password>
 
 # Application
-CLIENT_URL=http://localhost:3000
+CLIENT_URL=http://localhost:5000
+NODE_ENV=development
+PORT=5000
 ```
 
-⚠️ **Gmail Setup**: Use app-specific password with 2FA enabled
+⚠️ **Important**: Gmail requires **app-specific password** (not regular password). Enable 2FA first.
 
 ---
 
-## ✅ Quality Assurance
+## 📊 Testing & Verification
 
-### Functionality Checklist
-- ✅ User authentication with JWT
-- ✅ Hospital emergency creation
-- ✅ Real-time socket notifications
-- ✅ Automatic geolocation capture
-- ✅ Interactive Mapbox visualization
-- ✅ One-click donor response
-- ✅ Email notifications
-- ✅ Badge auto-awarding
-- ✅ Points calculation
-- ✅ PDF certificate generation
-- ✅ Leaderboard ranking
-- ✅ Admin dashboard
-- ✅ No dummy buttons or placeholders
-
-### Performance Targets
-- Emergency notification: < 1 second
-- Geolocation capture: < 5 seconds
-- Map update: < 2 seconds
-- Email delivery: < 30 seconds
-- Badge award: Instant
-- Certificate generation: < 10 seconds
-
----
-
-## 🔍 Testing Instructions
-
-### Smoke Test (5 minutes)
-1. Start server: `npm start`
+### Quick 5-Minute Test
+1. `npm start` → Verify "Server running on port 5000"
 2. Create hospital account
 3. Create donor account
-4. Create emergency request
-5. Verify donor receives notification
-6. Check map displays correctly
+4. Hospital creates emergency
+5. Donor sees alert banner + sound immediately
+6. Donor can see map with emergency location
 
-### Full Integration Test (30 minutes)
-1. Complete smoke test
-2. Donor responds to emergency
+### Full 30-Minute Test
+1. Complete quick test above
+2. Donor responds via map
 3. Hospital marks donation complete
-4. Verify badge appears
-5. Confirm email received
-6. Check certificate generated
-7. Review leaderboard update
+4. Verify badge appears in donor dashboard
+5. Verify email received in Gmail
+6. Verify certificate generated
+7. Verify points on leaderboard
+
+See [TEST_SCENARIO.md](TEST_SCENARIO.md) for detailed testing workflows.
 
 ---
 
 ## 🐛 Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Socket.io alerts not received | Verify Socket.io running, check donor eligibility (blood type + 30km radius) |
-| Mapbox shows error | Confirm MAPBOX_TOKEN in .env is valid |
-| Email not sending | Check SMTP credentials, enable Gmail app password |
-| Geolocation denied | Ensure browser permission is granted, HTTPS in production |
-| Database connection failed | Verify MONGODB_URI string, database service running |
+**Socket.io alerts not received?**
+→ Check [QUICK_REFERENCE.md#scenario-emergency-created-but-donor-doesnt-get-alert](QUICK_REFERENCE.md)
 
-For questions or issues, please open an issue on the GitHub repository.
+**Mapbox not showing?**
+→ Check [QUICK_REFERENCE.md#scenario-mapbox-not-showing](QUICK_REFERENCE.md)
+
+**Geolocation not updating?**
+→ Check [QUICK_REFERENCE.md#scenario-geolocation-not-working](QUICK_REFERENCE.md)
+
+**Emails not sending?**
+→ Check [QUICK_REFERENCE.md#scenario-email-not-sending](QUICK_REFERENCE.md)
+
+**Badge not awarded?**
+→ Check [QUICK_REFERENCE.md#scenario-badge-not-awarded](QUICK_REFERENCE.md)
+
+See [QUICK_REFERENCE.md](QUICK_REFERENCE.md#step-5-troubleshooting) for complete troubleshooting guide.
 
 ---
 
-## 🛡️ Admin Management
+## 📋 File Structure
 
-### Create Admin User
+```
+src/
+├── server.js                          # Main server + Socket.io setup
+├── controllers/
+│   ├── emergencyController.js         # Emergency logic + socket.io emit
+│   ├── donorController.js             # Donor management + location update
+│   └── ...
+├── routes/
+│   ├── emergencyRoutes.js             # Emergency API endpoints
+│   ├── donorRoutes.js                 # Donor endpoints (location update)
+│   └── ...
+├── models/
+│   ├── BloodRequest.js                # Emergency data model
+│   ├── DonorBadge.js                  # Badge system with auto-award
+│   ├── User.js                        # User model (stores location)
+│   └── ...
+├── utils/
+│   └── emailService.js                # Email templates + sender
+
+public/js/
+├── donor-dashboard.js                 # Socket.io + geolocation integration
+├── mapbox-emergency.js                # Complete Mapbox implementation
+└── hospital-dashboard.js              # Emergency form handler
+
+views/
+├── donor-dashboard.ejs                # Mapbox CSS/JS + map container
+└── hospital-dashboard.ejs             # Emergency request form
+```
+
+---
+
+## 🚀 Deployment
+
+### Before Deploying
+- [ ] SMTP configured for production email
+- [ ] MONGODB_URI points to production database
+- [ ] CLIENT_URL set to production domain  
+- [ ] NODE_ENV=production
+- [ ] SSL certificate installed
+- [ ] Database backups configured
+
+### Deploy Commands
+```bash
+# Heroku
+heroku create your-app-name
+heroku config:set MONGODB_URI=...
+git push heroku main
+
+# DigitalOcean/AWS/Azure
+npm install
+npm start
+# Configure reverse proxy (nginx)
+```
+
+---
+
+## ✅ Feature Completion Status
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| Emergency creation | ✅ Complete | Hospital form + API endpoint working |
+| Socket.io notifications | ✅ Complete | Real-time alerts to eligible donors |
+| Email alerts | ✅ Complete | Professional HTML template + SMTP sending |
+| Sound notification | ✅ Complete | 800Hz emergency beep via Web Audio API |
+| Mapbox visualization | ✅ Complete | Live map with markers, popups, auto-zoom |
+| Geolocation capture | ✅ Complete | Browser location auto-captured on load |
+| Location update API | ✅ Complete | POST /api/donor/update-location working |
+| Badge system | ✅ Complete | Auto-awarded on donation completion |
+| Points system | ✅ Complete | Calculated and displayed on leaderboard |
+| Certificates | ✅ Complete | PDF generated and downloadable |
+| Hospital dashboard | ✅ Complete | Emergency creation and management |
+| Donor dashboard | ✅ Complete | Emergency requests + map + achievements |
+| No dummy buttons | ✅ Complete | All features functional, no placeholders |
+
+---
+
+## 🎯 Success Metrics
+
+✅ System is working correctly when:
+1. Emergency created → Takes 2 seconds
+2. Donor notified → Within 1 second via socket.io
+3. Sound plays → Immediately on notification
+4. Map updates → Within 2 seconds
+5. Geolocation captured → Within 5 seconds
+6. Donor responds → Instant confirmation
+7. Badge awarded → Automatic on completion
+8. Email received → Within 30 seconds
+9. Certificate generated → Automatic on completion
+10. No console errors → Clean JavaScript execution
+
+---
+
+## 📞 Support & Documentation
+
+**Documentation Files** (all included):
+1. [STARTUP_GUIDE.md](STARTUP_GUIDE.md) - Setup instructions (read first)
+2. [TEST_SCENARIO.md](TEST_SCENARIO.md) - Testing guide
+3. [QUICK_REFERENCE.md](QUICK_REFERENCE.md) - API reference & debugging
+4. [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) - Technical architecture
+
+**Quick Links**:
+- Setup: See [STARTUP_GUIDE.md](STARTUP_GUIDE.md)
+- Testing: See [TEST_SCENARIO.md](TEST_SCENARIO.md)
+- Debugging: See [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
+- Architecture: See [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)
+
+---
+
+## 🎉 Summary
+
+**BloodLink is a complete, production-ready emergency blood donation system featuring**:
+
+✅ Real-time socket.io notifications  
+✅ Mapbox location visualization  
+✅ Auto geolocation capture  
+✅ Email alerts  
+✅ Sound notifications  
+✅ Badge system with auto-award  
+✅ Donation certificates  
+✅ Points leaderboard  
+✅ Hospital & donor dashboards  
+✅ Zero dummy buttons or placeholders  
+✅ Comprehensive documentation  
+
+**Status**: READY FOR TESTING & DEPLOYMENT
+
+👉 **GET STARTED**: Follow [STARTUP_GUIDE.md](STARTUP_GUIDE.md) step-by-step
+- **Authentication**: JWT
+- **Email**: Nodemailer
+- **Maps**: Geocoding API
+
+## Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd bloodlink
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+4. **Start MongoDB**
+   ```bash
+   mongod
+   ```
+
+5. **Run the server**
+   ```bash
+   npm run dev
+   ```
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/logout` - Logout user
+- `GET /api/auth/me` - Get current user
+
+### Hospital Routes
+- `GET /api/hospital/profile` - Get hospital profile
+- `PUT /api/hospital/profile` - Update hospital profile
+- `POST /api/hospital/requests` - Create blood request
+- `GET /api/hospital/requests` - Get all requests
+- `GET /api/hospital/requests/:id` - Get single request
+- `PUT /api/hospital/requests/:id` - Update request
+- `PUT /api/hospital/requests/:id/close` - Close request
+- `PUT /api/hospital/blood-stock` - Update blood stock
+- `GET /api/hospital/search-donors` - Search donors
+
+### Donor Routes
+- `GET /api/donor/profile` - Get donor profile
+- `PUT /api/donor/profile` - Update donor profile
+- `GET /api/donor/nearby-requests` - Get nearby requests
+- `POST /api/donor/requests/:id/interest` - Show interest
+- `GET /api/donor/eligibility` - Check eligibility
+- `POST /api/donor/donation` - Record donation
+- `GET /api/donor/donation-history` - Get donation history
+
+### Public Routes
+- `GET /api/public/requests` - Get all active requests
+- `GET /api/public/requests/:id` - Get single request
+- `GET /api/public/search` - Search requests
+- `GET /api/public/blood-availability` - Get blood availability
+
+## Database Schema
+
+### User
+- fullName, email, phone, password
+- userType (donor/hospital/public)
+- Location with GPS coordinates
+- Verification status
+
+### Donor
+- Blood group
+- Donation history
+- Trust score and ratings
+- Eligibility status
+- Notification preferences
+
+### Hospital
+- Hospital name and registration details
+- Blood bank stock levels
+- License and verification documents
+- Contact information
+
+### BloodRequest
+- Blood group and units needed
+- Patient information
+- Request status and urgency
+- Location and timeline
+- Interested donors list
+
+### DonationHistory
+- Donor and hospital references
+- Blood group and units collected
+- Health check data
+- Completion status
+
+### Notification
+- Type and content
+- Related entities
+- Delivery channels and status
+- Read status
+
+## Environment Variables
+
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/bloodlink
+JWT_SECRET=<your-secure-jwt-secret>
+JWT_EXPIRE=7d
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=<your-email@gmail.com>
+SMTP_PASS=<your-gmail-app-password>
+GOOGLE_MAPS_API_KEY=<your-google-maps-api-key>
+CLIENT_URL=http://localhost:5000
+```
+
+## Project Structure
+
+```
+bloodlink/
+├── src/
+│   ├── server.js                 # Main server file
+│   ├── models/                   # MongoDB schemas
+│   ├── controllers/              # Request handlers
+│   ├── routes/                   # API routes
+│   ├── middleware/               # Custom middleware
+│   └── utils/                    # Helper functions
+├── views/                        # EJS templates
+├── public/
+│   ├── css/                      # Stylesheets
+│   ├── js/                       # Client-side scripts
+│   └── images/                   # Images
+├── config/
+│   ├── database.js              # Database connection
+│   └── constants.js             # App constants
+├── .env                         # Environment variables
+├── .gitignore                   # Git ignore file
+└── package.json                 # Dependencies
+
+```
+
+## Next Steps
+
+- [ ] Create registration/login frontend
+- [ ] Build hospital dashboard UI
+- [ ] Build donor dashboard UI
+- [ ] Create blood request listing page
+- [ ] Implement donor search and filtering
+- [ ] Add file upload for documents
+- [ ] Integrate Google Maps API
+- [ ] Add SMS/WhatsApp notifications
+- [ ] Implement chat/messaging system
+- [ ] Add user reviews and ratings
+- [ ] Create admin dashboard
+- [ ] Add advanced filtering and sorting
+- [ ] Implement donation reminders
+- [ ] Add analytics and reporting
+- [ ] Deploy to production
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+---
+
+## 🛡️ Admin Dashboard
+
+### Setup Admin User
+
+1. **Create Admin Account** (First time setup):
 ```bash
 node scripts/createAdminUser.js
 ```
 
-**Default Credentials:**
+This creates an admin account with:
 - Email: `admin@bloodlink.com`
-- Password: `Admin@123`
+- Password: `<set-during-creation>`
 
-⚠️ **Important**: Change password immediately after first login!
+⚠️ **IMPORTANT**: Use a strong password and keep it secure!
 
-### Admin Dashboard Features
-- User management (create, edit, disable accounts)
-- Emergency request monitoring
-- Blood stock management
-- System health monitoring
-- Analytics and reports
-- Donation history review
-
-**Access**: `http://localhost:3000/admin/dashboard` (after login)
-
----
-
-## 📦 Deployment
-
-### Heroku
-```bash
-heroku create your-bloodlink-app
-heroku addons:create mongolab:sandbox
-heroku config:set JWT_SECRET=your-secret
-heroku config:set MAPBOX_TOKEN=your-token
-git push heroku main
-```
-
-### AWS/DigitalOcean/Azure
-1. Clone repository to server
-2. Install Node.js and MongoDB
-3. Configure `.env` with production values
-4. Run `npm install && npm start`
-5. Set up nginx reverse proxy
-6. Configure SSL certificate
-
----
-
-## 📊 System Statistics
-
-When fully deployed, BloodLink supports:
-- ✅ Real-time notifications to 100+ concurrent users
-- ✅ <1 second emergency alert delivery
-- ✅ Unlimited emergency requests
-- ✅ Automatic badge awarding
-- ✅ Scalable socket.io connections
-- ✅ Production-grade MongoDB database
-
----
-
-## 🎯 Development Roadmap
-
-- **Q1 2026**: Mobile app development (React Native)
-- **Q2 2026**: SMS/WhatsApp integration
-- **Q3 2026**: Advanced analytics dashboard
-- **Q4 2026**: AI-powered donor matching
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see LICENSE file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- Built with Node.js and MongoDB
-- Maps powered by Mapbox
-- Email service via Nodemailer
-- Real-time updates with Socket.io
-
----
-
-## 🚀 Ready to Launch?
-
-1. ✅ Follow the setup instructions in **Getting Started**
-2. ✅ Configure your `.env` file
-3. ✅ Create test accounts
-4. ✅ Run integration tests
-5. ✅ Deploy to production
-
-**Questions?** Open an issue or contact the development team.
-
-**Status**: Production Ready ✅
+2. **Access Admin Dashboard**:
+   - Navigate to `http://localhost:3000/admin/dashboard`
+   - Login with admin credentials
    - Full administrative access
 
 ### Admin Features
